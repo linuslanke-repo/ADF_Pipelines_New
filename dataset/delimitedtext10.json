@@ -1,24 +1,24 @@
 {
-    "name": "DelimitedText10",
-    "properties": {
-        "linkedServiceName": {
-            "referenceName": "HttpServer1",
-            "type": "LinkedServiceReference"
-        },
-        "annotations": [],
-        "type": "DelimitedText",
-        "typeProperties": {
-            "location": {
-                "type": "HttpServerLocation",
-                "relativeUrl": "anshlambagit/Azure-Data-Factory/refs/heads/main/Raw%20Data/Fact_Sales_2.csv"
-            },
-            "columnDelimiter": ",",
-            "rowDelimiter": "\n",
-            "escapeChar": "\\",
-            "firstRowAsHeader": false,
-            "quoteChar": null
-        },
-        "schema": []
-    },
-    "type": "Microsoft.DataFactory/factories/datasets"
+	"name": "delimitedtext10",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "HttpServer1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": "anshlambagit/Azure-Data-Factory/refs/heads/main/Raw%20Data/Fact_Sales_2.csv"
+			},
+			"columnDelimiter": ",",
+			"rowDelimiter": "\n",
+			"escapeChar": "\\",
+			"firstRowAsHeader": false,
+			"quoteChar": null
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

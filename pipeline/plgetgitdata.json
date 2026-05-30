@@ -50,13 +50,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "DelimitedText10",
+						"referenceName": "delimitedtext10",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "DelimitedText9",
+						"referenceName": "delimitedtext9",
 						"type": "DatasetReference"
 					}
 				]
