@@ -1,0 +1,24 @@
+{
+	"name": "triggerManager",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "plManagerFileDropEvent",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/adventure-works-project/blobs/bronze",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/fcda66e3-a23b-4b14-885b-bbe8f0b1ca66/resourceGroups/rgADFCourse/providers/Microsoft.Storage/storageAccounts/sa5555",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}
