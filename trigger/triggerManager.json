@@ -2,15 +2,8 @@
 	"name": "triggerManager",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
-		"pipelines": [
-			{
-				"pipelineReference": {
-					"referenceName": "plManagerFileDropEvent",
-					"type": "PipelineReference"
-				}
-			}
-		],
+		"runtimeState": "Started",
+		"pipelines": [],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
 			"blobPathBeginsWith": "/adventure-works-project/blobs/bronze",
