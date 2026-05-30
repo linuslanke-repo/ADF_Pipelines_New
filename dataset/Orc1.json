@@ -1,0 +1,21 @@
+{
+	"name": "Orc1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Orc",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "csvfileinavro",
+				"folderPath": "avroformat",
+				"fileSystem": "contdestination"
+			},
+			"enablePhysicalSchema": true
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,14 +1,13 @@
 {
-    "name": "HttpServer1",
-    "type": "Microsoft.DataFactory/factories/linkedservices",
-    "properties": {
-        "description": "GitHubConnector",
-        "annotations": [],
-        "type": "HttpServer",
-        "typeProperties": {
-            "url": "https://raw.githubusercontent.com/",
-            "enableServerCertificateValidation": false,
-            "authenticationType": "Anonymous"
-        }
-    }
+	"name": "HttpServer1",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "HttpServer",
+		"typeProperties": {
+			"url": "https://raw.githubusercontent.com/",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
 }

@@ -1,0 +1,15 @@
+{
+	"name": "adflinus5555",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Enabled",
+			"editable": true
+		}
+	},
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "33aa3f34-143b-40f6-964a-69fd505de8bc",
+		"tenantId": "13f5a5ff-7948-442d-bdb4-3f693820ad9d"
+	}
+}

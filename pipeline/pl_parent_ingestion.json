@@ -1,0 +1,255 @@
+{
+	"name": "pl_parent_ingestion",
+	"properties": {
+		"description": "Parent pipeline",
+		"activities": [
+			{
+				"name": "Get Raw Files",
+				"description": "Scans the raw directory and returns a list of all files present.",
+				"type": "GetMetadata",
+				"dependsOn": [
+					{
+						"activity": "rawFolderValidate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "rawDataSet",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "Filter Fact CSVs",
+				"description": "Takes the file list from Get Metadata and strips out everything except CSV files starting with 'fact'.",
+				"type": "Filter",
+				"dependsOn": [
+					{
+						"activity": "Get Raw Files",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get Raw Files').output.childItems",
+						"type": "Expression"
+					},
+					"condition": {
+						"value": "@and(startswith(item().name, variables('TargetPrefix')), endswith(item().name, variables('TargetExtension')))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "FactCsvLooper",
+				"description": "Loops over filtered file list",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Filter Fact CSVs",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Filter Fact CSVs').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "CopyFilteredData",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings",
+										"copyBehavior": "FlattenHierarchy"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "FactCsvDataset",
+									"type": "DatasetReference",
+									"parameters": {
+										"CurrentFileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "FromManagerDataSet",
+									"type": "DatasetReference",
+									"parameters": {
+										"from_whom_param": {
+											"value": "@concat('Manager_input_',item().name)",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "rawFolderValidate",
+				"type": "Validation",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "rawDataSet",
+						"type": "DatasetReference"
+					},
+					"timeout": "0.12:00:00",
+					"sleep": 10
+				}
+			},
+			{
+				"name": "CopyGitData",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "FactCsvLooper",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "HttpReadSettings",
+							"requestMethod": "GET"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "GitHubDataSet",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "datasetFromGit",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"variables": {
+			"TargetExtension": {
+				"type": "String",
+				"defaultValue": ".csv"
+			},
+			"TargetPrefix": {
+				"type": "String",
+				"defaultValue": "Fact"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2026-05-28T19:23:28Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
