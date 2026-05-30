@@ -117,7 +117,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "plGetGitData",
+						"referenceName": "plgetgitdata",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
