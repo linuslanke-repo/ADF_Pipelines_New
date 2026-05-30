@@ -29,10 +29,6 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"pipeline": {
-						"referenceName": "plFactsSelected_copy1",
-						"type": "PipelineReference"
-					},
 					"waitOnCompletion": true
 				}
 			}
