@@ -38,6 +38,8 @@
 				"name": "ForEachMetadata",
 				"description": "Loops over every field in the metadata ",
 				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Set variable1",
