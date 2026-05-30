@@ -1,50 +1,45 @@
 {
-    "name": "plProduction",
-    "properties": {
-        "activities": [
-            {
-                "name": "ExecuteManagerPipeline",
-                "type": "ExecutePipeline",
-                "dependsOn": [],
-                "policy": {
-                    "secureInput": false
-                },
-                "userProperties": [],
-                "typeProperties": {
-                    "pipeline": {
-                        "referenceName": "plManagerFileDropEvent",
-                        "type": "PipelineReference"
-                    },
-                    "waitOnCompletion": true
-                }
-            },
-            {
-                "name": "ExecuteOnSelectedPipeline",
-                "type": "ExecutePipeline",
-                "dependsOn": [
-                    {
-                        "activity": "ExecuteManagerPipeline",
-                        "dependencyConditions": [
-                            "Succeeded"
-                        ]
-                    }
-                ],
-                "policy": {
-                    "secureInput": false
-                },
-                "userProperties": [],
-                "typeProperties": {
-                    "pipeline": {
-                        "referenceName": "plFactsSelected_copy1",
-                        "type": "PipelineReference"
-                    },
-                    "waitOnCompletion": true
-                }
-            }
-        ],
-        "concurrency": 1,
-        "annotations": [],
-        "lastPublishTime": "2026-05-28T11:29:29Z"
-    },
-    "type": "Microsoft.DataFactory/factories/pipelines"
+	"name": "plProduction",
+	"properties": {
+		"activities": [
+			{
+				"name": "ExecuteManagerPipeline",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "plManagerFileDropEvent",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "ExecuteOnSelectedPipeline",
+				"type": "ExecutePipeline",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "plFactsSelected_copy1",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"concurrency": 1,
+		"annotations": [],
+		"lastPublishTime": "2026-05-28T11:29:29Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }
